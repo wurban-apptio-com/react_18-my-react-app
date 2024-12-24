@@ -7,7 +7,7 @@ npm test
 echo '----------test finished----------'
 
 echo '----------running eslint----------'
-npx eslint --fix
+./node_modules/.bin/eslint --fix
 echo '----------eslint finished----------'
 
 echo '----------running copyrighter----------'
@@ -15,4 +15,3 @@ bash ./.husky/copyrighter.sh
 echo '----------copyrighter finished----------'
 
 git update-index --again
-# echo 'manually failing'; exit 1
