@@ -1,1 +1,18 @@
+echo '---------- running prettier----------'
+prettier --config ./.prettierrc.json  --check $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --write --ignore-unknown
+echo '----------prettier finished----------'
+
+echo '----------running test----------'
 npm test
+echo '----------test finished----------'
+
+echo '----------running eslint----------'
+npx eslint --fix
+echo '----------eslint finished----------'
+
+echo '----------running copyrighter----------'
+bash ./.husky/copyrighter.sh
+echo '----------copyrighter finished----------'
+
+git update-index --again
+# echo 'manually failing'; exit 1
