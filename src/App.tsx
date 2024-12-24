@@ -5,11 +5,15 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
-import { SampleComponent } from './SampleComponent';
+import { LazyLoadImport } from './utils';
+
+const SampleComponent = LazyLoadImport(
+  async () => (await import('./components/SampleComponent')).SampleComponent,
+);
 
 export function App() {
   const [count, setCount] = useState(0);
-  SampleDefaultFunction();
+
   return (
     <>
       <div>
