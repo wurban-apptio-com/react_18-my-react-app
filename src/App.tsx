@@ -15,6 +15,8 @@ export function App() {
     <>
       <Add />
       <Add />
+      <Add />
+
       <SampleComponent />
     </>
   );
