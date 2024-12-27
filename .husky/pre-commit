@@ -1,28 +1,40 @@
 #!/bin/bash
-echo '---------- running prettier----------'
+
+staged_files=$(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')
+stylelint_files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.(scss)$' | sed 's| |\\ |g')
+
+echo '----------running copyrighter----------'
 start_time=$(date +%s%N)
 start_total_time=$start_time
-prettier --config ./.prettierrc.json  --check $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --write --ignore-unknown
+bash ./.husky/copyrighter.sh
 time_taken=$((($(date +%s%N) - $start_time)/1000000))
-echo "----------prettier finished and took $time_taken miliseconds ----------"
+echo "----------copyrighter finished and took $time_taken miliseconds ----------\n"
+
+echo '---------- running prettier----------'
+start_time=$(date +%s%N)
+prettier --config ./.prettierrc.json  --check $staged_files --write --ignore-unknown 
+time_taken=$((($(date +%s%N) - $start_time)/1000000))
+echo "----------prettier finished and took $time_taken miliseconds ----------\n"
+
+echo '----------running stylelint----------'
+start_time=$(date +%s%N)
+echo $stylelint_files | xargs stylelint
+time_taken=$((($(date +%s%N) - $start_time)/1000000))
+echo "----------stylelint finished and took $time_taken miliseconds ----------\n"
+
+echo '----------running eslint----------'
+start_time=$(date +%s%N)
+# similar performance between following two lines (perhaps if the project grows larger the difference will be measurable)
+# echo $staged_files | grep -E '\.(js|jsx|ts|tsx)$' | xargs ./node_modules/.bin/eslint --fix
+./node_modules/.bin/eslint --fix
+time_taken=$((($(date +%s%N) - $start_time)/1000000))
+echo "----------eslint finished and took $time_taken miliseconds ----------\n"
 
 echo '----------running test----------'
 start_time=$(date +%s%N)
 npm test
 time_taken=$((($(date +%s%N) - $start_time)/1000000))
-echo "----------test finished and took $time_taken miliseconds ----------"
-
-echo '----------running eslint----------'
-start_time=$(date +%s%N)
-./node_modules/.bin/eslint --fix
-time_taken=$((($(date +%s%N) - $start_time)/1000000))
-echo "----------eslint finished and took $time_taken miliseconds ----------"
-
-echo '----------running copyrighter----------'
-start_time=$(date +%s%N)
-bash ./.husky/copyrighter.sh
-time_taken=$((($(date +%s%N) - $start_time)/1000000))
-echo "----------copyrighter finished and took $time_taken miliseconds ----------"
+echo "----------test finished and took $time_taken miliseconds ----------\n"
 
 git update-index --again
 time_taken=$((($(date +%s%N) - $start_total_time)/1000000))

@@ -14,6 +14,7 @@ export function App() {
   return (
     <>
       <Add />
+      <Add />
       <SampleComponent />
     </>
   );
