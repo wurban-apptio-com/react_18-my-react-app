@@ -7,6 +7,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import eslintPluginImport from 'eslint-plugin-import';
+import react from 'eslint-plugin-react';
 
 export default tseslint.config(
   { ignores: ['dist'] },
@@ -21,6 +22,12 @@ export default tseslint.config(
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       'eslint-plugin-import': eslintPluginImport,
+      react,
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -33,6 +40,12 @@ export default tseslint.config(
       'no-plusplus': 'error',
       'no-duplicate-imports': 'error',
       'eslint-plugin-import/no-default-export': 'error',
+      ...react.configs.recommended.rules,
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-fragments': 'error',
+      'react/jsx-no-useless-fragment': 'error',
+      'react/button-has-type': 'error',
+      '@typescript-eslint/no-wrapper-object-types': 'error',
     },
   },
 );

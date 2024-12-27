@@ -15,3 +15,4 @@ bash ./.husky/copyrighter.sh
 echo '----------copyrighter finished----------'
 
 git update-index --again
+# echo 'manually failing'; exit 1
