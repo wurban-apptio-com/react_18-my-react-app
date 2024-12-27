@@ -1,18 +1,30 @@
+#!/bin/bash
 echo '---------- running prettier----------'
+start_time=$(date +%s%N)
+start_total_time=$start_time
 prettier --config ./.prettierrc.json  --check $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --write --ignore-unknown
-echo '----------prettier finished----------'
+time_taken=$((($(date +%s%N) - $start_time)/1000000))
+echo "----------prettier finished and took $time_taken miliseconds ----------"
 
 echo '----------running test----------'
+start_time=$(date +%s%N)
 npm test
-echo '----------test finished----------'
+time_taken=$((($(date +%s%N) - $start_time)/1000000))
+echo "----------test finished and took $time_taken miliseconds ----------"
 
 echo '----------running eslint----------'
+start_time=$(date +%s%N)
 ./node_modules/.bin/eslint --fix
-echo '----------eslint finished----------'
+time_taken=$((($(date +%s%N) - $start_time)/1000000))
+echo "----------eslint finished and took $time_taken miliseconds ----------"
 
 echo '----------running copyrighter----------'
+start_time=$(date +%s%N)
 bash ./.husky/copyrighter.sh
-echo '----------copyrighter finished----------'
+time_taken=$((($(date +%s%N) - $start_time)/1000000))
+echo "----------copyrighter finished and took $time_taken miliseconds ----------"
 
 git update-index --again
+time_taken=$((($(date +%s%N) - $start_total_time)/1000000))
+echo "----------pre-commit hook finished and took $time_taken miliseconds ----------"
 # echo 'manually failing'; exit 1
