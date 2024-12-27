@@ -1,0 +1,8 @@
+/*********************************************************************
+* © Copyright IBM Corp. 2024
+*********************************************************************/
+// Bring in all the styles for Carbon
+@use '@carbon/styles/scss/config' with (
+  $font-path: '@ibm/plex'
+);
+@use '@carbon/react';
